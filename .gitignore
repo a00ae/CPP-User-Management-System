@@ -1,0 +1,34 @@
+# Executables and Binaries
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.so
+*.dylib
+*.a
+*.lib
+
+# Build Directories
+build/
+bin/
+obj/
+out/
+cmake-build-*/
+.vscode/
+.vs
+.idea/
+
+# OS / System Specific Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+x64/
+x86/
+Debug/
+Release/
+
+# Log and Temp Files
+*.log
+*.tmp
+*.bak
