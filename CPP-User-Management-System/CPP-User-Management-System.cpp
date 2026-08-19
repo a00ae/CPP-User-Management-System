@@ -1,20 +1,121 @@
-// CPP-User-Management-System.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+
+using namespace std;
+
+
+
+void ShowMainMenue();
+const string clientFileName = "client.txt";
+
+struct stClient {
+    string AccountNumber;
+    string PinCode;
+    string FullName;
+    string Phone;
+    double Balance;
+    bool MarkForDelete = false;
+};
+
+
+enum enMainMenueOptions
+{
+    eListClients = 1, eAddNewClient = 2,
+    eDeleteClient = 3, eUpdateClient = 4,
+    eFindClient = 5, eExit = 6
+};
+
+void GoBackToMainMenue()
+{
+    cout << "\n\nPress any key to go back to Main Menue...";
+    system("pause>0");
+    ShowMainMenue();
+}
+
+
+short ReadMainMenueOption()
+{
+    cout << "Choose what do you want to do? [1 to 6]? ";
+    short Choice = 0;
+    cin >> Choice;
+    return Choice;
+}
+
+void AddUserClient() {
+    cout << "[1] add Client";
+}
+
+void DeleteUserClient() {
+    cout << "[2] Delete Client";
+}
+
+void UpdateUserClient() {
+    cout << "[3] Update Client";
+}
+
+
+
+
+void PerfromMainMenueOption(enMainMenueOptions MainMenueOption)
+{
+    switch (MainMenueOption)
+    {
+    case enMainMenueOptions::eListClients:
+    {
+        system("cls");
+
+        GoBackToMainMenue();
+        break;
+    }
+    case enMainMenueOptions::eAddNewClient:
+        system("cls");
+        AddUserClient();
+        GoBackToMainMenue();
+        break;
+    case enMainMenueOptions::eDeleteClient:
+        system("cls");
+
+        GoBackToMainMenue();
+        break;
+    case enMainMenueOptions::eUpdateClient:
+        system("cls");
+
+        GoBackToMainMenue();
+        break;
+    case enMainMenueOptions::eFindClient:
+        system("cls");
+
+        GoBackToMainMenue();
+        break;
+    case enMainMenueOptions::eExit:
+        system("cls");
+
+        break;
+    }
+}
+void ShowMainMenue()
+{
+    system("cls");
+    cout << "===========================================\n";
+    cout << "\t\tMain Menue Screen\n";
+    cout << "===========================================\n";
+    cout << "\t[1] Show Client List.\n";
+    cout << "\t[2] Add New Client.\n";
+    cout << "\t[3] Delete Client.\n";
+    cout << "\t[4] Update Client Info.\n";
+    cout << "\t[5] Find Client.\n";
+    cout << "\t[6] Exit.\n";
+    cout << "===========================================\n";
+    PerfromMainMenueOption((enMainMenueOptions)ReadMainMenueOption());
+}
+
+
+
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    ShowMainMenue();
+
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
