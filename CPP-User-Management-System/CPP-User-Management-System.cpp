@@ -28,6 +28,8 @@ enum enMainMenueOptions
     eFindClient = 5, eExit = 6
 };
 
+
+
 void GoBackToMainMenue()
 {
     cout << "\n\nPress any key to go back to Main Menue...";
@@ -173,6 +175,104 @@ void ShowFindClientScreen() {
  
 
 
+// Add 
+
+bool ClientExistsByAccountNumber(string AccountNumber, string
+    FileName)
+{
+    vector <stClient> vClients;
+    fstream MyFile;
+    MyFile.open(FileName, ios::in);//read Mode
+    if (MyFile.is_open())
+    {
+        string Line;
+        stClient Client;
+        while (getline(MyFile, Line))
+        {
+            Client = ConvertLinetoRecord(Line);
+            if (Client.AccountNumber == AccountNumber)
+            {
+                MyFile.close();
+                return true;
+            }
+            vClients.push_back(Client);
+        }
+        MyFile.close();
+    }
+    return false;
+}
+
+
+
+
+stClient ReadNewClient()
+{
+    stClient Client;
+    cout << "Enter Account Number? ";
+    // Usage of std::ws will extract allthe whitespace character
+    getline(cin >> ws, Client.AccountNumber);
+    while (ClientExistsByAccountNumber(Client.AccountNumber,
+        clientFileName))
+    {
+        cout << "\nClient with [" << Client.AccountNumber << "] already exists, Enter another Account Number ? ";
+            getline(cin >> ws, Client.AccountNumber);
+    }
+    cout << "Enter PinCode? ";
+    getline(cin, Client.PinCode);
+    cout << "Enter Name? ";
+    getline(cin, Client.FullName);
+    cout << "Enter Phone? ";
+    getline(cin, Client.Phone);
+    cout << "Enter AccountBalance? ";
+    cin >> Client.Balance;
+    return Client;
+}
+
+
+
+void AddDataLineToFile(string FileName, string stDataLine)
+{
+    fstream MyFile;
+    MyFile.open(FileName, ios::out | ios::app);
+    if (MyFile.is_open())
+    {
+        MyFile << stDataLine << endl;
+        MyFile.close();
+    }
+}
+
+
+void AddNewClient() {
+    stClient Client;
+    Client = ReadNewClient();
+
+    AddDataLineToFile(clientFileName, ConvertRecordToLine(Client));
+}
+
+
+
+void AddNewClients()
+{
+    char AddMore = 'Y';
+    do
+    {
+        //system("cls");
+        cout << "Adding New Client:\n\n";
+        AddNewClient();
+        cout << "\nClient Added Successfully, do you want to add more clients ? Y / N ? ";
+            cin >> AddMore;
+    } while (toupper(AddMore) == 'Y');
+}
+
+
+void ShowAddNewClientsScreen() {
+    cout << "\n_________________________________________\n";
+    cout << "\tAdd New Clients Screen";
+    cout << "\n_________________________________________\n";
+
+    AddNewClients();
+}
+
 
 void PerfromMainMenueOption(enMainMenueOptions MainMenueOption)
 {
@@ -187,6 +287,7 @@ void PerfromMainMenueOption(enMainMenueOptions MainMenueOption)
     }
     case enMainMenueOptions::eAddNewClient:
         system("cls");
+        ShowAddNewClientsScreen();
         GoBackToMainMenue();
         break;
     case enMainMenueOptions::eDeleteClient:
