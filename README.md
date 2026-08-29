@@ -54,9 +54,7 @@ To compile and run this project, you need:
 
 This project was built as a practical application to solidify C++ concepts, covering data structures, file streams, and system architecture.
 
-## License
 
-This project is open source and available under the [MIT License](https://opensource.org/license/mit).
 
 
 
