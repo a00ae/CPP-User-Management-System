@@ -1,49 +1,64 @@
-# User Management System (C++)
+# C++ User Management System
 
-A lightweight console-based application built with **C++** to perform CRUD operations for user data.
+A C++ console-based application for managing user accounts, client data, and system operations efficiently. Designed to demonstrate core C++ programming concepts, OOP principles, file handling, and structured data management.
 
----
+## 🚀 Features
 
-## ?? Features
+- **User & Client Management**: Add, update, delete, and search client records.
+- **Data Persistence**: Save and load account/user data using file I/O operations.
+- **Authentication**: User login system with detailed permissions management.
+- **Transactions System**: Perform deposit, withdrawal, and balance inquiries.
+- **Interactive CLI**: Simple and intuitive command-line user interface.
 
-The application provides an interactive main menu with 6 core options:
+## 🛠️ Built With
 
-1. **View Users:** Display a list of all registered users in the system.
-2. **Add User:** Register a new user with their details.
-3. **Search User:** Query and locate a specific user by ID or name.
-4. **Delete User:** Remove an existing user from the system.
-5. **Edit User:** Update information for a specific registered user.
-6. **Exit:** Terminate the application safely.
+- **Language**: C++
+- **IDE / Environment**: Visual Studio / GCC / MSVC
+- **Storage**: Text File Data Storage (`Clients.txt`, `Users.txt`)
 
----
+## 📋 Prerequisites
 
-## ??? Tech Stack
+To compile and run this project, you need:
+- A C++ compiler supporting **C++11** or higher (GCC, Clang, or MSVC).
+- Visual Studio / VS Code or any preferred IDE.
 
-* **Language:** C++
-* **Interface:** Command Line Interface (CLI) / Console
+## ⚙️ How to Build and Run
 
----
+### Option 1: Using Visual Studio
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/a00ae/CPP-User-Management-System.git](https://github.com/a00ae/CPP-User-Management-System.git)
 
-## ?? Getting Started
+  1. Open CPP-User-Management-System.sln in Visual Studio.
+  2. Press Ctrl + F5 to build and run the application.
 
-### Prerequisites
+### Option 2: Using Command Line (G++)
+1.Clone the repository and navigate to the directory:
+  ```bash
+  git clone [https://github.com/a00ae/CPP-User-Management-System.git](https://github.com/a00ae/CPP-User-Management-System.git)
+  cd CPP-User-Management-System
+  ```
 
-Ensure you have a C++ compiler installed on your system (e.g., g++, clang, or MSVC).
+2. Compile the source file:
+   ```bash
+   g++ -std=c++11 CPP-User-Management-System.cpp -o UserManagement
+3. Run the executable:
+   - Windows
+     ```bash
+     .\UserManagement.exe
+  - Linux / macOS:
+      ```bash
+      ./UserManagement
 
-### Building and Running
+## Course & Certification Context
 
-`ash
-# 1. Clone the repository
-git clone [https://github.com/a00ae/CPP-User-Management-System.git](https://github.com/a00ae/CPP-User-Management-System.git)
+This project was built as a practical application to solidify C++ concepts, covering data structures, file streams, and system architecture.
 
-# 2. Navigate to the project directory
-cd CPP-User-Management-System
+## License
 
-# 3. Compile the source code
-g++ main.cpp -o UserManagement
+This project is open source and available under the [MIT License](https://opensource.org/license/mit).
 
-# 4. Run the executable
-.\UserManagement.exe
+
 
 
 
