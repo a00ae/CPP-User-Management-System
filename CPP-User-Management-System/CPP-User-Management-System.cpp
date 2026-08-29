@@ -524,12 +524,79 @@ void ShowFindClientScreen() {
 
 // Transctios
 
-void PerfromTransctionsMenueOption(enTransctionsMenueOptions TransctiosMainMenu) {
+
+double ChengeDeposit(string AcccountNumber) {
+    double depoist = 0;
+    cout << "How much do you want to deposit?" ;
+    cin >> ws >> depoist;
+    return depoist;
+}
+
+
+void Deposit(string AccountNumber, vector<stClient> &vClients, stClient Client) {
+
+    char answer = 'n';
+    if (FindClientByAccountNumber(AccountNumber, vClients, Client)) {
+        PrintClientCard(Client);
+
+        cout << "\n\nAre you sure you want update this client? y/n? ";
+        cin >> answer;
+        if (tolower(answer) == 'y') {
+
+
+            for (stClient &cl : vClients) {
+
+                if (cl.AccountNumber == AccountNumber) {
+                    cl.Balance += ChengeDeposit(AccountNumber);
+                    break;
+                }
+            }
+
+            SaveCleintsDataToFile(clientFileName, vClients);
+
+            vClients = LoadCleintsDataFromFile(clientFileName);
+
+            cout << "\n\nClient Updated Successfully.";
+
+
+        }
+        else {
+            cout << "\nClient with Account Number (" << AccountNumber
+                << ") is Not Found!";
+        }
+
+
+
+
+
+    }
+}
+
+
+void ShowDepositScreen() {
     
+    cout << "\n-----------------------------------\n";
+    cout << "\tDeposit Client Screen";
+    cout << "\n-----------------------------------\n";
+
+    vector <stClient> vClient = LoadCleintsDataFromFile(clientFileName);
+    stClient Client;
+    string AccountNumber = ReadClientAccountNumber();
+
+    Deposit(AccountNumber, vClient, Client);
+
+}
+
+
+
+
+void PerfromTransctionsMenueOption(enTransctionsMenueOptions TransctiosMainMenu) {
+
     switch (TransctiosMainMenu) {
 
-    case enTransctionsMenueOptions::eDeposit: 
+    case enTransctionsMenueOptions::eDeposit:
         system("cls");
+        ShowDepositScreen();
         GoBackToTransctiosMenue();
         break;
     case enTransctionsMenueOptions::eWithdraw:
@@ -562,7 +629,6 @@ void ShowTransactionsScreen() {
 
     PerfromTransctionsMenueOption((enTransctionsMenueOptions)ReadTransctionsMenueOption());
 }
-
 
 
 
