@@ -27,7 +27,7 @@ To compile and run this project, you need:
 ### Option 1: Using Visual Studio
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/a00ae/CPP-User-Management-System.git](https://github.com/a00ae/CPP-User-Management-System.git)
+   git clone https://github.com/a00ae/CPP-User-Management-System.git
 
   1. Open CPP-User-Management-System.sln in Visual Studio.
   2. Press Ctrl + F5 to build and run the application.
@@ -35,7 +35,7 @@ To compile and run this project, you need:
 ### Option 2: Using Command Line (G++)
 1.Clone the repository and navigate to the directory:
   ```bash
-  git clone [https://github.com/a00ae/CPP-User-Management-System.git](https://github.com/a00ae/CPP-User-Management-System.git)
+  git clone https://github.com/a00ae/CPP-User-Management-System.git
   cd CPP-User-Management-System
   ```
 
