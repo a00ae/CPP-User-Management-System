@@ -8,8 +8,10 @@ using namespace std;
 
 void ShowTransactionsScreen();
 void ShowMainMenue();
+void Login();
 
 const string clientFileName = "client.txt";
+const string usersFileName = "users.txt";
 
 struct stClient {
     string AccountNumber;
@@ -20,12 +22,20 @@ struct stClient {
     bool MarkForDelete = false;
 };
 
+struct stUser {
+    string UserName;
+    string Password;
+    int Permissions;
+    bool MarkForDelete = false;
+};
+
+stUser CurrentUser;
 enum enMainMenueOptions
 {
     eListClients = 1, eAddNewClient = 2,
     eDeleteClient = 3, eUpdateClient = 4,
     eFindClient = 5, eTransactions = 6,
-    eExit = 7
+    eMangeUsers = 7, eExit= 8,
 };
 
 enum enTransctionsMenueOptions {
@@ -70,7 +80,7 @@ void GoBackToTransctiosMenue()
 
 short ReadMainMenueOption()
 {
-    cout << "Choose what do you want to do? [1 to 7]? ";
+    cout << "Choose what do you want to do? [1 to 8]? ";
     short Choice = 0;
     cin >> Choice;
     return Choice;
@@ -127,6 +137,20 @@ stClient ConvertLinetoRecord(string Line, string Seperator = "#//#")
     return Client;
 }
 
+stUser ConvertUserLinetoRecord(string Line, string Seperator = "#//#")
+{
+    stUser User;
+    vector <string> vUserDate;
+
+    vUserDate = SplitString(Line, Seperator);
+
+    User.UserName = vUserDate[0];
+    User.Password = vUserDate[1];
+    User.Permissions = stoi(vUserDate[2]);
+
+    return User;
+}
+
 vector <stClient> LoadCleintsDataFromFile(string fileName) {
     vector <stClient> vClient;
     fstream file;
@@ -142,6 +166,39 @@ vector <stClient> LoadCleintsDataFromFile(string fileName) {
         file.close();
     }
     return vClient;
+}
+
+vector <stUser> LoadUsersDataFromFile(string fileName)
+{
+    vector <stUser> vUser;
+
+    fstream file;
+
+    file.open(fileName, ios::in);
+
+    if (file.is_open())
+    {
+        string Line;
+        stUser User;
+
+        while (getline(file, Line))
+        {
+            User = ConvertUserLinetoRecord(Line);
+
+            vUser.push_back(User);
+        }
+
+
+
+
+        file.close();
+    }
+
+
+    return vUser;
+
+
+
 }
 
 void PrintClientRecordLine(stClient Client)
@@ -605,14 +662,76 @@ void ShowMainMenue()
     cout << "\t[4] Update Client Info.\n";
     cout << "\t[5] Find Client.\n";
     cout << "\t[6] Transactions.\n";
-    cout << "\t[7] Exit.\n";
+    cout << "\t[7] Mange Users.\n";
+    cout << "\t[7] Logout.\n";
     cout << "===========================================\n";
 
     PerfromMainMenueOption((enMainMenueOptions)ReadMainMenueOption());
 }
 
+bool FindUserByUserNameAndPassword(string UserName, string Password, stUser &User)
+{
+    vector <stUser> vUsers = LoadUsersDataFromFile(usersFileName);
+
+
+    for (stUser U : vUsers)
+    {
+        if (U.UserName == UserName && U.Password == Password)
+        {
+            User = U;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
+bool LoadUserInfo(string UserName, string Password)
+{
+    return FindUserByUserNameAndPassword(UserName, Password, CurrentUser);
+}
+
+
+void Login()
+{
+    bool LoginFaild = false;
+
+    string UserName, Passwoed;
+
+    do {
+        system("cls");
+        cout << "\n-----------------------------------\n";
+        cout << "\tLogin Screen";
+        cout << "\n-----------------------------------\n";
+
+
+
+        if (LoginFaild)
+        {
+            cout << "Invlaid Username/Password!\n";
+
+        }
+
+        cout << "Enter UserName? ";
+        cin >> UserName;
+
+        cout << "Enter Password? ";
+        cin >> Passwoed;
+
+        LoginFaild = !LoadUserInfo(UserName, Passwoed);
+
+
+    } while (LoginFaild);
+
+
+    ShowMainMenue();
+
+}
+
 int main()
 {
-    ShowMainMenue();
+    Login();
     return 0;
 }
