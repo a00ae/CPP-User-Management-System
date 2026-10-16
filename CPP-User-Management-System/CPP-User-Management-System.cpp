@@ -75,6 +75,14 @@ string ReadClientAccountNumber() {
     return AccountNumber;
 }
 
+string ReadUserName()
+{
+    string userName = "";
+    cout << "\nPlease enter UserName Account? ";
+    cin >> userName;
+    return userName;
+}
+//client
 void PrintClientCard(stClient Client)
 {
     cout << "\nThe following are the client details:\n";
@@ -84,6 +92,16 @@ void PrintClientCard(stClient Client)
     cout << "\nName           : " << Client.FullName;
     cout << "\nPhone          : " << Client.Phone;
     cout << "\nAccount Balance: " << Client.Balance;
+    cout << "\n-----------------------------------\n";
+}
+//user
+void PrintUserCard(stUser User)
+{
+    cout << "\nThe following are the client details:\n";
+    cout << "-----------------------------------";
+    cout << "\nUsername: " << User.UserName;
+    cout << "\nPassword:  " << User.Password;
+    cout << "\nPermissions:  " << User.Permissions;
     cout << "\n-----------------------------------\n";
 }
 
@@ -162,7 +180,7 @@ string ConvertRecordToLine(stClient Client, string Seperator = "#//#")
     return stClientRecord;
 }
 
-string ConvertUserLinetoRecord(stUser User, string Seperator = "#//#")
+string ConvertUserRecordToLine(stUser User, string Seperator = "#//#")
 {
     string userRecord = "";
     userRecord += User.UserName + Seperator;
@@ -289,7 +307,7 @@ void ShowAllClientsScreen() {
     cout << "\n_______________________________________________________";
     cout << "_________________________________________\n" << endl;
 }
-
+//Client Save File
 vector <stClient> SaveCleintsDataToFile(string FileName, vector <stClient> vClients)
 {
     fstream MyFile;
@@ -297,7 +315,7 @@ vector <stClient> SaveCleintsDataToFile(string FileName, vector <stClient> vClie
     string DataLine;
     if (MyFile.is_open())
     {
-        for (stClient C : vClients)
+        for (stClient &C : vClients)
         {
             if (!C.MarkForDelete)
             {
@@ -309,7 +327,35 @@ vector <stClient> SaveCleintsDataToFile(string FileName, vector <stClient> vClie
     }
     return vClients;
 }
+//User Save File
 
+vector<stUser> SaveUsersDataToFile(string fileName, vector <stUser> vUsers)
+{
+    fstream file;
+    file.open(fileName, ios::out);
+    string Line;
+
+    if (file.is_open())
+    {
+
+        for (stUser& U : vUsers)
+        {
+            if (!U.MarkForDelete)
+            {
+                Line = ConvertUserRecordToLine(U);
+                file << Line << endl;
+
+            }
+        }
+
+
+
+        file.close();
+    }
+
+    return vUsers;
+
+}
 bool ClientExistsByAccountNumber(string AccountNumber, string FileName)
 {
     fstream MyFile;
@@ -387,7 +433,7 @@ void ShowAddNewClientsScreen() {
     cout << "\n_________________________________________\n";
     AddNewClients();
 }
-
+// Find Client
 bool FindClientByAccountNumber(string AccountNumber, vector <stClient> vClients, stClient& Client)
 {
     for (stClient C : vClients)
@@ -400,7 +446,24 @@ bool FindClientByAccountNumber(string AccountNumber, vector <stClient> vClients,
     }
     return false;
 }
+//Find User
+bool FindUserByUserName(string UserName, vector<stUser> vUsers, stUser& User)
+{
+    for (stUser U : vUsers)
+    {
+        if (U.UserName == UserName && !U.MarkForDelete)
+        {
+            User = U;
+            return true;
+        }
+    }
 
+    return false;
+}
+
+
+
+//Delete Client Fun
 bool MarkClientForDeleteByAccountNumber(string AccountNumber, vector <stClient>& vClients)
 {
     for (stClient& C : vClients)
@@ -414,6 +477,22 @@ bool MarkClientForDeleteByAccountNumber(string AccountNumber, vector <stClient>&
     return false;
 }
 
+//Delte User Fun
+
+bool MarkUserForDeleteByUserName(string UserName, vector<stUser>& vUsers)
+{
+    for (stUser& U : vUsers)
+    {
+        if (U.UserName == UserName)
+        {
+            U.MarkForDelete = true;
+            return true;
+        }
+    }
+
+    return false;
+}
+//Delete Client
 bool DeleteClientByAccountNumber(string AccountNumber, vector <stClient>& vClients) {
     stClient Client;
     char Answer = 'n';
@@ -435,6 +514,41 @@ bool DeleteClientByAccountNumber(string AccountNumber, vector <stClient>& vClien
     }
     return false;
 }
+
+//Delete User
+
+bool DeleteUserByUserName(string UserName, vector<stUser>& vUsers)
+{
+    stUser User;
+    char AddMore = 'n';
+
+    if (FindUserByUserName(UserName, vUsers, User))
+    {
+        PrintUserCard(User);
+
+        cout << "\n\nAre you sure you want delete this Username? y/n ? ";
+        cin >> AddMore;
+
+        if (toupper(AddMore) == 'Y')
+        {
+            MarkUserForDeleteByUserName(UserName, vUsers);
+            SaveUsersDataToFile(usersFileName, vUsers);
+
+            cout << "\n\nUsers Deleted Successfully...";
+            return true;
+
+        }
+
+    }
+    else
+    {
+        cout << "\nUsers with Username (" << UserName << ") is Not Found!";
+    }
+
+    return false;
+}
+
+
 
 void ShowDeleteClientScreen() {
     cout << "\n-----------------------------------\n";
@@ -804,8 +918,10 @@ void AddNewUser()
 {
     stUser User;
     User = ReadNewUser();
-    AddDataLineToFile(usersFileName, ConvertUserLinetoRecord(User));
+    AddDataLineToFile(usersFileName, ConvertUserRecordToLine(User));
 }
+
+
 
 void AddNewUsers()
 {
@@ -825,13 +941,29 @@ void AddNewUsers()
 void ShowAddNewUserScreen()
 {
     cout << "\n-----------------------------------\n";
-    cout << "\tAdd New Screen";
+    cout << "\tAdd New User Screen";
     cout << "\n-----------------------------------\n";
 
     AddNewUsers();
 }
 
 
+
+void ShowDeleteUsersScreen()
+{
+    cout << "\n-----------------------------------";
+    cout << "\nDelete User Screen";
+    cout << "\n-----------------------------------\n";
+
+    vector<stUser> vUsers = LoadUsersDataFromFile(usersFileName);
+    string UserName = ReadUserName();
+
+    DeleteUserByUserName(UserName, vUsers);
+
+
+    
+    
+}
 
 
 void ShowMangeUserMenu()
@@ -871,6 +1003,17 @@ void  PerformManageUsersMenueOption(enMangeUsersMuneOption MangeUserMenu)
     {
         system("cls");
         ShowAddNewUserScreen();
+        GoBackToMangeMune();
+    }
+    case enMangeUsersMuneOption::eDeleteUser:
+    {
+        system("cls");
+        ShowDeleteUsersScreen();
+        GoBackToMangeMune();
+    }
+    case enMangeUsersMuneOption::eUpdateUser:
+    {
+        system("cls");
     }
     
     
@@ -938,7 +1081,7 @@ void ShowMainMenue()
     cout << "\t[5] Find Client.\n";
     cout << "\t[6] Transactions.\n";
     cout << "\t[7] Mange Users.\n";
-    cout << "\t[7] Logout.\n";
+    cout << "\t[8] Logout.\n";
     cout << "===========================================\n";
 
     PerfromMainMenueOption((enMainMenueOptions)ReadMainMenueOption());
