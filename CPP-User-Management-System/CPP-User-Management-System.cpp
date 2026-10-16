@@ -577,6 +577,22 @@ stClient ChangeClientRecord(string AccountNumber)
     return Client;
 }
 
+stUser ChangeUserRecord(string UserName)
+{
+    stUser User;
+
+    User.UserName = UserName;
+
+    cout << "Enter Password? ";
+    getline(cin >> ws, User.Password);
+
+    cout << "Enter Permissions? ";
+    cin >> User.Permissions;
+
+
+    return User;
+}
+
 bool UpdateClientByAccountNumber(string AccountNumber, vector <stClient>& vClients) {
     stClient client;
     char answer = 'n';
@@ -602,6 +618,44 @@ bool UpdateClientByAccountNumber(string AccountNumber, vector <stClient>& vClien
         cout << "\nClient with Account Number (" << AccountNumber << ") is Not Found!";
     }
     return false;
+}
+
+bool UpdateUserByUserName(string UserName, vector<stUser> &vUsers)
+{
+    stUser User;
+    char Answer = 'n';
+
+    if (FindUserByUserName(UserName, vUsers, User))
+    {
+        PrintUserCard(User);
+        cout << "\n\nAre you sure you want update this users? y/n? ";
+        cin >> Answer;
+
+
+        if (toupper(Answer) == 'Y') {
+            for (stUser & Us : vUsers)
+            {
+                if (Us.UserName == UserName)
+                {
+                    Us = ChangeUserRecord(UserName);
+                    break;
+                }
+            }
+            SaveUsersDataToFile(usersFileName, vUsers);
+            cout << "\n\nUsers Updated Successfully...";
+            return true;
+
+        }
+        
+    }
+    else
+    {
+        cout << "\nUsers with User Name (" << UserName << ") is Not Found!";
+    }
+
+    return false;
+
+
 }
 
 void ShowUpdateClientScreen() {
@@ -966,6 +1020,18 @@ void ShowDeleteUsersScreen()
 }
 
 
+void ShowUpdateUsersScreen()
+{
+    cout << "\n-----------------------------------";
+    cout << "\nUpate User Screen";
+    cout << "\n-----------------------------------\n";
+
+    vector<stUser> vUsers = LoadUsersDataFromFile(usersFileName);
+    string UserName = ReadUserName();
+
+    UpdateUserByUserName(UserName, vUsers);
+
+}
 void ShowMangeUserMenu()
 {
 
@@ -1014,6 +1080,8 @@ void  PerformManageUsersMenueOption(enMangeUsersMuneOption MangeUserMenu)
     case enMangeUsersMuneOption::eUpdateUser:
     {
         system("cls");
+        ShowUpdateUsersScreen();
+        GoBackToMangeMune();
     }
     
     
