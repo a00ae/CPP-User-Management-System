@@ -105,6 +105,32 @@ void PrintUserCard(stUser User)
     cout << "\n-----------------------------------\n";
 }
 
+
+bool CheckAccessPermissions(enMainMenuePermissions Permissions)
+{
+    if (CurrentUser.Permissions == enMainMenuePermissions::eAll)
+    {
+        return true;
+    }
+
+    if ((Permissions & CurrentUser.Permissions) == Permissions)
+    {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+
+void ShowAccessDeniedMessage()
+{
+    cout << "\n------------------------------------\n";
+    cout << "Access Denied, \nYou dont Have Permission To Do this, \nPlease Conact Your Admin.";
+    cout << "\n------------------------------------\n";
+}
+
 void GoBackToMainMenue()
 {
     cout << "\n\nPress any key to go back to Main Menue...";
@@ -586,8 +612,8 @@ stUser ChangeUserRecord(string UserName)
     cout << "Enter Password? ";
     getline(cin >> ws, User.Password);
 
-    cout << "Enter Permissions? ";
-    cin >> User.Permissions;
+    //cout << "Enter Permissions? ";
+    //cin >> User.Permissions;
 
 
     return User;
@@ -813,6 +839,17 @@ void PerfromTransctionsMenueOption(enTransctionsMenueOptions TransctionsMainMenu
 }
 
 void ShowTransactionsScreen() {
+
+    if (!CheckAccessPermissions(enMainMenuePermissions::pTranactions))
+    {
+        ShowAccessDeniedMessage();
+        GoBackToMainMenue();
+        return;
+    }
+
+
+
+
     system("cls");
     cout << "===========================================\n";
     cout << "\tTransactions Menue Screen\n";
@@ -835,6 +872,13 @@ void ShowEndScreen() {
 
 void ShowAllUsersScreen()
 {
+
+    if (!CheckAccessPermissions(enMainMenuePermissions::pListClients))
+    {
+        ShowAccessDeniedMessage();
+        return;
+    }
+
     vector<stUser> vUser = LoadUsersDataFromFile(usersFileName);
 
     cout << "\n\t\t\t\t\tClient List (" << vUser.size() << ") Client(s).";
@@ -880,16 +924,6 @@ int ReadPermissionsToSet()
         return -1;
     }
 
-    cout << "\nDo you want to give access to: ";
-    cin >> Answer;
-
-    if (Answer == 'y' || Answer == 'Y')
-    {
-        Permissions += enMainMenuePermissions::pListClients;
-    }
-
-    cout << "\nDo you want to give access to: ";
-
 
     cout << "\nShow Client List? Y/N? ";
     cin >> Answer;
@@ -923,12 +957,6 @@ int ReadPermissionsToSet()
         Permissions += enMainMenuePermissions::pUpdateClients;
     }
 
-    cout << "\nUpdate Client? Y/N?";
-    cin >> Answer;
-    if (toupper(Answer) == 'Y')
-    {
-        Permissions += enMainMenuePermissions::pUpdateClients;
-    }
 
     cout << "\nTranactions? Y/N?";
     cin >> Answer;
@@ -994,6 +1022,12 @@ void AddNewUsers()
 
 void ShowAddNewUserScreen()
 {
+    if (!CheckAccessPermissions(enMainMenuePermissions::pAddNewClient))
+    {
+        ShowAccessDeniedMessage();
+        return;
+    }
+
     cout << "\n-----------------------------------\n";
     cout << "\tAdd New User Screen";
     cout << "\n-----------------------------------\n";
@@ -1005,6 +1039,13 @@ void ShowAddNewUserScreen()
 
 void ShowDeleteUsersScreen()
 {
+    if (!CheckAccessPermissions(enMainMenuePermissions::pDeleteClient))
+    {
+        ShowAccessDeniedMessage();
+        return;
+    }
+
+
     cout << "\n-----------------------------------";
     cout << "\nDelete User Screen";
     cout << "\n-----------------------------------\n";
@@ -1022,6 +1063,13 @@ void ShowDeleteUsersScreen()
 
 void ShowUpdateUsersScreen()
 {
+    if (!CheckAccessPermissions(enMainMenuePermissions::pUpdateClients))
+    {
+        ShowAccessDeniedMessage();
+        return;
+    }
+
+
     cout << "\n-----------------------------------";
     cout << "\nUpate User Screen";
     cout << "\n-----------------------------------\n";
@@ -1032,8 +1080,46 @@ void ShowUpdateUsersScreen()
     UpdateUserByUserName(UserName, vUsers);
 
 }
+
+
+void ShowFindUserScreen()
+{
+    if (!CheckAccessPermissions(enMainMenuePermissions::pFindClient))
+    {
+        ShowAccessDeniedMessage();
+        return;
+    }
+
+
+    cout << "\n-----------------------------------";
+    cout << "\Find User Screen";
+    cout << "\n-----------------------------------\n";
+
+
+    vector <stUser> vUsres = LoadUsersDataFromFile(usersFileName);
+    string UserName = ReadUserName();
+    stUser User;
+
+    if (FindUserByUserName(UserName, vUsres, User))
+        PrintUserCard(User);
+    else
+        cout << "\nUser with User Name[" << UserName << "] is not found!";
+
+
+
+}
+
+
+
 void ShowMangeUserMenu()
 {
+
+    if (!CheckAccessPermissions(enMainMenuePermissions::pManageUsers))
+    {
+        ShowAccessDeniedMessage();
+        GoBackToMainMenue();
+        return;
+    }
 
 
     system("cls");
@@ -1082,6 +1168,16 @@ void  PerformManageUsersMenueOption(enMangeUsersMuneOption MangeUserMenu)
         system("cls");
         ShowUpdateUsersScreen();
         GoBackToMangeMune();
+    }
+    case enMangeUsersMuneOption::eFindUser: 
+    {
+        system("cls");
+        ShowFindUserScreen();
+        GoBackToMainMenue();
+    }
+    case enMangeUsersMuneOption::eMainMune:
+    {
+        ShowMainMenue();
     }
     
     
