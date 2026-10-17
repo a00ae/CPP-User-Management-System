@@ -11,6 +11,21 @@ A C++ console-based application for managing user accounts, client data, and sys
 - **Transactions System:** Perform deposit, withdrawal, and balance inquiries.
 - **Interactive CLI:** Simple and intuitive command-line user interface.
 
+---
+
+## 🔑 Default Credentials
+
+For initial testing and first-time login, use the following administrator account:
+
+| Field | Value |
+| :--- | :--- |
+| **Username** | `Admin` |
+| **Password** | `1234` |
+
+> 💡 **Note:** It is recommended to create a new admin account with full permissions after your first login.
+
+---
+
 ## 🛠️ Built With
 - **Language:** C++
 - **IDE / Environment:** Visual Studio / GCC / MSVC
