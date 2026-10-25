@@ -1,5 +1,5 @@
 # C++ User Management System
-### Video Demo: [Link Demo](https://youtu.be/xtuhekdywas?si=iL_TrP92pMNmC5F7)
+
 
 A C++ console-based application for managing user accounts, client data, and system operations efficiently. Designed to demonstrate core C++ programming concepts, OOP principles, file handling, and structured data management.
 
